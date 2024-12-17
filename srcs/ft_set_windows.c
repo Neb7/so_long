@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:59:28 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 17:39:29 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/17 17:57:08 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	ft_set_windows(t_map **map)
 	(*map)->map[(*map)->i_player[0]][(*map)->i_player[1]] = '0';
 	(*map)->img_win = mlx_new_image((*map)->win->win, (*map)->lenght * \
 	PXL_L, (*map)->height * PXL_H);
+	if (!((*map)->img_win))
+		return (ft_free_map(map), ft_exit_fail(ERR_MALLOC));
 }
 
 static void	ft_init_img(t_map **map)
@@ -49,6 +51,9 @@ static void	ft_init_img(t_map **map)
 		return (ft_free_map(map), ft_exit_fail(ERR_MALLOC));
 	(*map)->win->wall = ft_init_textur("img/wall", (*map)->win, 8, 0);
 	if (!((*map)->win->wall))
+		return (ft_free_map(map), ft_exit_fail(ERR_MALLOC));
+	(*map)->win->ennemy = ft_init_textur("img/e", (*map)->win, 5, 0);
+	if (!((*map)->win->ennemy))
 		return (ft_free_map(map), ft_exit_fail(ERR_MALLOC));
 }
 

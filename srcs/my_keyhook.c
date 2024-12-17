@@ -6,13 +6,14 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:16:11 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 18:18:13 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:42:06 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 static bool	ft_pressed(char *c, t_map *map);
+static void	ft_die(t_map *map);
 
 void	my_keyhook(mlx_key_data_t keydata, void *param)
 {
@@ -45,10 +46,10 @@ void	my_keyhook(mlx_key_data_t keydata, void *param)
 
 static bool	ft_pressed(char *c, t_map *map)
 {
-	if (*c != '1')
+	if (*c != '1' && *c != 'H')
 	{
 		map->nb_move++;
-		ft_fprintf(1, "Nombre de mouvements : %u\n", map->nb_move);
+		ft_fprintf(1, "Number of movements : %u\n", map->nb_move);
 		if (*c == 'C')
 		{
 			*c = '0';
@@ -58,7 +59,7 @@ static bool	ft_pressed(char *c, t_map *map)
 				write(1, "\033[3;92m*Criiic... klaac*\033[0m\n", 29);
 		}
 		else if (*c == 'E' && map->nb_collectible < 1)
-			return (ft_free_map(&map), ft_exit_succes(), true);
+			return (ft_free_map(&map), ft_exit_succes(true), true);
 		else if (*c == 'E' && map->nb_collectible > 0)
 		{
 			write(1, "\033[3;91m*Clac-clac-clac*\033[0m Let me in. ", 39);
@@ -66,5 +67,13 @@ static bool	ft_pressed(char *c, t_map *map)
 		}
 		return (true);
 	}
+	else if (*c == 'H')
+		return (ft_die(map), true);
 	return (false);
+}
+
+static void	ft_die(t_map *map)
+{
+	ft_free_map(&map);
+	ft_exit_succes(false);
 }

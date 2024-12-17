@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:39:52 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 11:29:35 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:22:52 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ static void	ft_read_map(t_map **map, char **buf, int fd, t_vector **vec)
 			return (ft_free_map(map), ft_free_vector(vec), free(*buf), \
 			ft_exit_fail(ERR_BIG));
 		if (ft_strlen (*buf) - 1 != (*map)->lenght)
-			return (ft_end_gnl(fd, buf), ft_free_map(map), \
-			ft_free_vector(vec), free(*buf), ft_exit_fail(ERR_LEN));
+			if (ft_check_last_line(map, *buf))
+				return (ft_end_gnl(fd, buf), ft_free_map(map), \
+				ft_free_vector(vec), free(*buf), ft_exit_fail(ERR_LEN));
 		if (ft_verify_line(*buf, map))
 		{
 			ft_end_gnl(fd, buf);
@@ -81,7 +82,7 @@ static int	ft_verify_line(char *buf, t_map **map)
 	while (i < (*map)->lenght)
 	{
 		if (buf[i] != '1' && buf[i] != '0' && buf[i] != 'C' && \
-		buf[i] != 'E' && buf[i] != 'P')
+		buf[i] != 'E' && buf[i] != 'P' && buf[i] != 'H')
 			return (1);
 		i++;
 	}

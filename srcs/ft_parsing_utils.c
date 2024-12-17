@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:04:44 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 11:29:26 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/09 20:07:07 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,19 @@ static void	ft_can_we_reach(char **copy, t_map **map)
 			else if (copy[y][x] == 'C')
 				return (ft_free_copy(copy, (*map)->height), ft_free_map(map), \
 				ft_exit_fail(ERR_IMP_C));
+			else if (copy[y][x] == 'H')
+				return (ft_free_copy(copy, (*map)->height), ft_free_map(map), \
+				ft_exit_fail(ERR_HOST));
 		}
 	}
+}
+
+bool	ft_check_last_line(t_map **map, char *buf)
+{
+	size_t	len;
+
+	len = ft_strlen (buf);
+	if (len == (*map)->lenght && buf[len - 1] != '\n')
+		return (false);
+	return (true);
 }

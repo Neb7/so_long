@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:11:08 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 17:39:17 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:18:04 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,12 @@ void	ft_free_map(t_map **map)
 		while (++i < (ssize_t)(*map)->height)
 			free((*map)->map[i]);
 	free((*map)->map);
+	if ((*map)->img_win)
+		mlx_delete_image((*map)->win->win, (*map)->img_win);
 	if ((*map)->win)
 		ft_free_win((*map)->win);
+	if ((*map)->index_ennemy)
+		ft_free_vector((&(*map)->index_ennemy));
 	free((*map));
 }
 
@@ -61,7 +65,10 @@ void	ft_free_win(t_windows *win)
 		ft_destroy_img(win->win, &win->coll);
 	if (win->wall)
 		ft_destroy_img(win->win, &win->wall);
-	mlx_terminate(win->win);
+	if (win->ennemy)
+		ft_destroy_img(win->win, &win->ennemy);
+	if (win->win)
+		mlx_terminate(win->win);
 	free(win);
 }
 

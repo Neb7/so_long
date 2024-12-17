@@ -10,6 +10,7 @@ SRC			= ft_parsing_utils.c \
 			  ft_error.c \
 			  ft_flut_file.c \
 			  main_loop.c \
+			  main_loop_utils.c \
 			  ft_set_windows.c \
 			  my_keyhook.c \
 			  main.c
@@ -45,7 +46,7 @@ CROSS		= \033[9m
 FLASH		= \033[5m
 NEGATIF		= \033[7m
 
-all:			libmlx ${NAME}
+all:			${LIBMLX} libmlx ${NAME}
 
 ${OBJS_DIR}%.o: ${SRCS_DIR}%.c | ${OBJS_DIR}
 				@cc ${CFLAGS} -c $< -o $@
@@ -64,14 +65,21 @@ ${OBJS_DIR}:
 
 clean:
 				@${RM} ${OBJS}
-				@${RM} -r ${OBJS_DIR} ${LIBMLX}/build
+				@${RM} -r ${OBJS_DIR}
 				@make clean -sC ${LIBFT}
 				@echo "${RED}'${NAME}' objects are deleted ! 👍${RESET}"
 
 fclean:			clean
-				@${RM} ${NAME} ${LIBFT}libft.a ${NAME_2}
+				@${RM} ${NAME} ${LIBFT}libft.a
 				@echo "${RED}'${NAME}' and 'libft.a' are deleted ! 👍${RESET}"
 
 re:				fclean all
 
-.PHONY:			all clean fclean re libmlx
+bonus:			all
+
+${LIBMLX}:
+				@echo "${CYAN}${ITALIC}Cloning of MLX42 Codam...${RESET}"
+				@git clone https://github.com/codam-coding-college/MLX42.git $@
+				@echo "${CYAN}Clonne is ready !!!${RESET}"
+
+.PHONY:			all clean fclean re libmlx bonus

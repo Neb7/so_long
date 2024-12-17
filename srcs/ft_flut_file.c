@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:39:12 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 16:05:10 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/09 11:46:55 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ void	ft_flut_file(t_map **map, char **copy)
 static void	ft_add_in_tmp(t_vector *tmp, unsigned int i, t_map **map, \
 char **copy)
 {
-	if (ft_memchar("0CE", copy[(i + 1) / (*map)->lenght][(i + 1) % \
-	(*map)->lenght], 3) != -1)
+	if (ft_memchar("0CEH", copy[(i + 1) / (*map)->lenght][(i + 1) % \
+	(*map)->lenght], 4) != -1)
 		ft_add_index(tmp, i + 1, map, copy);
-	if (ft_memchar("0CE", copy[(i - 1) / (*map)->lenght][(i - 1) % \
-	(*map)->lenght], 3) != -1)
+	if (ft_memchar("0CEH", copy[(i - 1) / (*map)->lenght][(i - 1) % \
+	(*map)->lenght], 4) != -1)
 		ft_add_index(tmp, i - 1, map, copy);
-	if (ft_memchar("0CE", copy[(i + (*map)->lenght) / \
-	(*map)->lenght][(i + (*map)->lenght) % (*map)->lenght], 3) != -1)
+	if (ft_memchar("0CEH", copy[(i + (*map)->lenght) / \
+	(*map)->lenght][(i + (*map)->lenght) % (*map)->lenght], 4) != -1)
 		ft_add_index(tmp, i + (*map)->lenght, map, copy);
-	if (ft_memchar("0CE", copy[(i - (*map)->lenght) / \
-	(*map)->lenght][(i - (*map)->lenght) % (*map)->lenght], 3) != -1)
+	if (ft_memchar("0CEH", copy[(i - (*map)->lenght) / \
+	(*map)->lenght][(i - (*map)->lenght) % (*map)->lenght], 4) != -1)
 		ft_add_index(tmp, i - (*map)->lenght, map, copy);
 }
 

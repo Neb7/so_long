@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 14:43:50 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 16:05:27 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/17 17:58:58 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ void	ft_have_good_nb(t_map **map)
 			return (ft_free_map(map), ft_exit_fail(ERR_OPN_MAP));
 		y++;
 	}
-	if ((*map)->nb_collectible < 1)
-		return (ft_free_map(map), ft_exit_fail(ERR_COLL));
-	else if ((*map)->i_player[0] == 0)
-		return (ft_free_map(map), ft_exit_fail(ERR_PLY));
+	ft_check_nb(map, nb_ex);
 }
 
 static void	ft_index_player(t_map **map, size_t x, size_t y)
@@ -79,10 +76,17 @@ static void	ft_check_first_last(t_map **map, size_t x, size_t max_y)
 
 static void	ft_check_char(t_map **map, size_t x, size_t y, int *nb_ex)
 {
+	size_t	tmp;
+
 	if ((*map)->map[y][x] == 'P')
 		ft_index_player(map, x, y);
 	else if ((*map)->map[y][x] == 'E')
 		ft_nb_exit(map, nb_ex);
 	else if ((*map)->map[y][x] == 'C')
 		((*map)->nb_collectible)++;
+	else if ((*map)->map[y][x] == 'H')
+	{
+		tmp = ((*map)->lenght * y) + x;
+		ft_add_char_vector(&tmp, (*map)->index_ennemy, 1, sizeof(size_t));
+	}
 }

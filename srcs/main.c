@@ -6,45 +6,12 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 13:53:46 by benpicar          #+#    #+#             */
-/*   Updated: 2024/12/06 18:21:20 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:00:13 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include <stdio.h>
-
-/*void	ft_error(char *str)
-{
-	write(2, str, ft_strlen(str));
-	exit(EXIT_FAILURE);
-}
-
-void my_keyhook(mlx_key_data_t keydata, void* param)
-{
-	// If we PRESS the 'J' key, print "Hello".
-	if (keydata.key == MLX_KEY_J && keydata.action == MLX_PRESS)
-		puts("Hello ");
-
-	// If we RELEASE the 'K' key, print "World".
-	if (keydata.key == MLX_KEY_K && keydata.action == MLX_RELEASE)
-		puts("World");
-
-	// If we HOLD the 'L' key, print "!".
-	if (keydata.key == MLX_KEY_L && keydata.action == MLX_REPEAT)
-		puts("!");
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		exit(0);
-	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
-		mlx_image_to_window(mlx, img, 100, 0);
-	(void)param;
-}
-
-static void ft_hook(void* param)
-{
-	const mlx_t* mlx = param;
-
-	printf("WIDTH: %d | HEIGHT: %d\n", mlx->height, mlx->height);
-}*/
 
 int	main(int ac, char **av)
 {
@@ -81,6 +48,10 @@ void	ft_init_map(t_map **map)
 	(*map)->nb_move = 0;
 	(*map)->img_win = NULL;
 	(*map)->time = 0;
+	(*map)->time_ennemy = 0;
+	(*map)->index_ennemy = ft_new_vector(sizeof(size_t));
+	if (!(*map)->index_ennemy)
+		return (ft_free_map(map), ft_exit_fail(ERR_MALLOC));
 }
 
 t_windows	*ft_init_win(t_map **map)
@@ -97,13 +68,36 @@ t_windows	*ft_init_win(t_map **map)
 	new->player = NULL;
 	new->sol = NULL;
 	new->wall = NULL;
+	new->ennemy = NULL;
 	return (new);
 }
 
-void	ft_exit_succes(void)
+void	ft_exit_succes(bool victory)
 {
-	write(1, "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░█▀▀▀░█▀▀▀░░█▀▀░▀▀█░░█", 164);
-	write(1, "░░░░\n░░░░█░▀█░█░▀█░░█▀▀░▄▀░░░▀░░░░\n░░░░▀▀▀▀░▀▀▀▀░░▀▀▀░▀▀", 164);
-	write(1, "▀░░▀░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n", 113);
+	if (victory)
+	{
+		write(1, "\033[5m", 4);
+		write(1, "\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n░░░░█▀▀▀░█▀▀▀░░█▀▀░▀", 149);
+		write(1, "▀█░░█░░░░\n░░░░█░▀█░█░▀█░░█▀▀░▄▀░░░▀░░░░\n░░░░▀▀▀▀░▀▀", 149);
+		write(1, "▀▀░░▀▀▀░▀▀▀░░▀░░░░\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n", 143);
+		write(1, "\033[0m", 4);
+	}
+	else
+		write(1, "\033[3;91mYOU DIED\033[0m\n", 20);
+	write(1, "Credits :\n\nCoin animation : Freekins (freekins.itch.io/)", 56);
+	write(1, "\nGrass : CodeSpree (codespree.itch.io/)\nTree : simodias (", 57);
+	write(1, "simodias.itch.io/)\nPlayer animation : cactusturtle (cactu", 57);
+	write(1, "sturtle.itch.io/)\nEnemy : Admurin (admurin.itch.io/)\nDoo", 56);
+	write(1, "rs : Me (Neb7 : github.com/neb7)\n", 33);
 	exit(EXIT_SUCCESS);
+}
+
+void	ft_check_nb(t_map **map, int nb_ex)
+{
+	if ((*map)->nb_collectible < 1)
+		return (ft_free_map(map), ft_exit_fail(ERR_COLL));
+	else if ((*map)->i_player[0] == 0)
+		return (ft_free_map(map), ft_exit_fail(ERR_PLY));
+	else if (nb_ex != 1)
+		return (ft_free_map(map), ft_exit_fail(ERR_SOR));
 }
